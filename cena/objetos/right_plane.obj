@@ -1,0 +1,13 @@
+# Blender v2.79 (sub 0) OBJ File: ''
+# www.blender.org
+mtllib right_plane.mtl
+o right_wall_Plane.002_wall3_right_wall
+v -0.999947 -1.000498 0.618013
+v -1.000053 0.999502 -1.381987
+v -1.000053 0.999502 0.618012
+v -0.999947 -1.000498 -1.381987
+vn 1.0000 0.0001 0.0000
+usemtl right_wall
+s off
+f 1//1 2//1 3//1
+f 1//1 4//1 2//1

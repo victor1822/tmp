@@ -1,0 +1,13 @@
+# Blender v2.79 (sub 0) OBJ File: ''
+# www.blender.org
+mtllib light_plane.mtl
+o light_Plane.004_Plane_ligth
+v 0.367725 -0.981443 -0.788278
+v -0.367621 -0.981482 -0.052931
+v 0.367725 -0.981443 -0.052931
+v -0.367621 -0.981482 -0.788278
+vn -0.0001 1.0000 0.0000
+usemtl ligth
+s 1
+f 1//1 2//1 3//1
+f 1//1 4//1 2//1
