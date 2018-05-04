@@ -60,7 +60,7 @@ bool Triangle::intersect( const Ray &ray,
 	intersection_record.t_ = glm::dot(edge2,qvec)*inv_det;
 
 
-	intersection_record.normal_ = glm::cross(edge1,edge2);
+	intersection_record.normal_ = glm::normalize(glm::cross(edge1,edge2));
 
         ///The point that the ray intercects the triangle
 

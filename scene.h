@@ -34,12 +34,9 @@ public:
     bool intersect( const Ray &ray,
                     IntersectionRecord &intersection_record ) const;
 
-    void load( const char* argx/*, glm::vec3 cores*/);
-    void loadspheres();
+    void load( const char* argx, int &mt/*material type*/);
 
-    //L(const Ray &ray,
-      //IntersectionRecord &intersection_record ) const;
-
+    void loadspheres(int &mt/*material type*/);
 
     std::vector< Primitive::PrimitiveUniquePtr > primitives_;
 

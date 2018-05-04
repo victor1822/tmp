@@ -24,7 +24,7 @@ int main( void )
 				1.0f,
                                 glm::ivec2{ x_resolution, y_resolution }, 
                                 //glm::vec3{ 0.0f, 0.0f,  1.0f },     // position to comment to edit
-				glm::vec3{ 0.0f, 0.0f,  15.0f },     // position to edit
+				glm::vec3{ 0.0f, 0.0f,  5.0f },     // position to edit
                                 glm::vec3{ 0.0f, 1.0f,  0.0f },     // up
                                 glm::vec3{ 0.0f, 0.0f, -1.0f } };   // look at
 
@@ -109,14 +109,22 @@ int main( void )
 	//arq.push_back("cena/objetos/pink_object.obj");
 
 	//arq.push_back("cena/objetos/super_light_plane.obj");
-	arq.push_back("cena/tudo.obj");
+	//arq.push_back("cena/tudo.obj");
+	arq.push_back("cena/cena_nova_difuso.obj");
+	//arq.push_back("cena/cornellbox_cubes.obj");
 		
 	//arq.push_back("cena/monkey2.obj");
 	//arq.push_back("cena/monkey.obj");
-	//for(std::size_t e=0;e<arq.size();e++)
-    	scene.load(arq[0]/*,cores[e]*/);
+	int lambertian_difuse=0,espelho=1;
 
-	//scene.loadspheres();
+	for(std::size_t e=0;e<arq.size();e++)
+    	scene.load(arq[e],lambertian_difuse);
+
+	arq.push_back("cena/cena_nova_espelhos.obj");
+
+    	scene.load(arq[arq.size()-1],espelho);
+
+	//scene.loadspheres(lambertian_difuse);
 
 
     Buffer rendering_buffer{ x_resolution, y_resolution };
@@ -138,7 +146,7 @@ int main( void )
 
 
     // Save the rendered image to a .ppm file.
-    rendering_buffer.save( "output_image2.ppm" );
+    rendering_buffer.save( "output_metalic_test2.ppm" );
 
     return EXIT_SUCCESS;
 }

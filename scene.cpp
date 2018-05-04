@@ -31,9 +31,11 @@ bool Scene::intersect( const Ray &ray,
 		intersection_record.cor[2] = primitives_[primitive_id]->cor[2];
 		intersection_record.emission = primitives_[primitive_id]->emission;
 			///LAMBERTIAN BRDF	
-		intersection_record.brdf[0] = primitives_[primitive_id]->cor[0]/M_PI;
-		intersection_record.brdf[1] = primitives_[primitive_id]->cor[1]/M_PI;
-		intersection_record.brdf[2] = primitives_[primitive_id]->cor[2]/M_PI;
+		intersection_record.brdf[0] = primitives_[primitive_id]->brdf[0];
+		intersection_record.brdf[1] = primitives_[primitive_id]->brdf[1];
+		intersection_record.brdf[2] = primitives_[primitive_id]->brdf[2];
+
+		intersection_record.material_type = primitives_[primitive_id]->material_type;
 		//intersection_record.normal_ = primitives_[primitive_id]->normal; //já é calculado dentro de intersect()
 
 		//intersection_record.cor[0] = (primitives_[primitive_id]->emission[0]+primitives_[primitive_id]->cor[0])*num;
@@ -46,7 +48,7 @@ bool Scene::intersect( const Ray &ray,
     return intersection_result;
 }
 
-void Scene::load( /*void*/const char* argx/*, glm::vec3 cores*/) 
+void Scene::load(const char* argx, int &mt/*material type*/) 
 {
 
  Assimp::Importer importer;
@@ -82,9 +84,9 @@ void Scene::load( /*void*/const char* argx/*, glm::vec3 cores*/)
 
 	size_t indice = primitives_.size()-1;
 
-	primitives_[indice]->normal[0] = normal_ptr[0].x;
-	primitives_[indice]->normal[1] = normal_ptr[0].y;
-	primitives_[indice]->normal[2] = normal_ptr[0].z;
+	primitives_[indice]->normal[0] = glm::normalize(normal_ptr[0].x);
+	primitives_[indice]->normal[1] = glm::normalize(normal_ptr[0].y);
+	primitives_[indice]->normal[2] = glm::normalize(normal_ptr[0].z);
 
 	//COR DIFUSA DO MTL
 	primitives_[indice]->cor[0] = kd.r;
@@ -110,6 +112,19 @@ void Scene::load( /*void*/const char* argx/*, glm::vec3 cores*/)
 	primitives_[indice]->emission[0] = ke.r;
 	primitives_[indice]->emission[1] = ke.g;
 	primitives_[indice]->emission[2] = ke.b;
+
+		primitives_[indice]->material_type = mt;//lambertian diffuse or metalic
+
+	if(mt==0){	
+		primitives_[indice]->brdf[0] = kd.r/M_PI; //lambertian diffuse
+		primitives_[indice]->brdf[1] = kd.g/M_PI;
+		primitives_[indice]->brdf[2] = kd.b/M_PI;
+	}
+	if(mt==1){	 
+		primitives_[indice]->brdf[0] = 1.0f;//metalic
+		primitives_[indice]->brdf[1] = 1.0f;
+		primitives_[indice]->brdf[2] = 1.0f;
+	}
 
       }
     }
@@ -166,10 +181,35 @@ void Scene::load( /*void*/const char* argx/*, glm::vec3 cores*/)
 
 }
 
-void Scene::loadspheres() 
+void Scene::loadspheres(int &mt/*material type*/) 
 {
+	
+	primitives_.push_back( Primitive::PrimitiveUniquePtr( new Sphere{ glm::vec3{ 0.0f, 0.0f, -0.6f }, 0.65f }  ) );
 
-	primitives_.push_back( Primitive::PrimitiveUniquePtr( new Sphere{ glm::vec3{ 0.0f+0.50f, 0.65f, -0.6f }, 0.37f } ) );
+	size_t indice = primitives_.size()-1;
+	primitives_[indice]->emission[0] = 0.0f;
+	primitives_[indice]->emission[1] = 0.0f;
+	primitives_[indice]->emission[2] = 0.0f;
+
+	primitives_[indice]->cor[0] = 0.640f;
+	primitives_[indice]->cor[1] = 0.640f;
+	primitives_[indice]->cor[2] = 0.0f;
+
+	primitives_[indice]->material_type = mt;
+
+	if(mt == 0){
+		primitives_[indice]->brdf[0] = 0.240f/M_PI;
+		primitives_[indice]->brdf[1] = 0.240f/M_PI;
+		primitives_[indice]->brdf[2] = 0.0f/M_PI;
+	}
+	if(mt == 1){
+		primitives_[indice]->brdf[0] = 1.0f;
+		primitives_[indice]->brdf[1] = 1.0f;
+		primitives_[indice]->brdf[2] = 1.0f;
+	}
+
+	
+	/*primitives_.push_back( Primitive::PrimitiveUniquePtr( new Sphere{ glm::vec3{ 0.0f+0.50f, 0.65f, -0.6f }, 0.37f } ) );
 
 	size_t indice = primitives_.size()-1;
 	primitives_[indice]->emission[0] = 0.0f;
@@ -186,7 +226,7 @@ void Scene::loadspheres()
 
 	primitives_.push_back( Primitive::PrimitiveUniquePtr( new Sphere{ glm::vec3{ 0.0f-0.50f, 0.65f, -0.6f }, 0.37f } ) );
 
-	indice = primitives_.size()-1;
+	indice++;
 	primitives_[indice]->emission[0] = 0.0f;
 	primitives_[indice]->emission[1] = 0.0f;
 	primitives_[indice]->emission[2] = 0.0f;
@@ -197,7 +237,9 @@ void Scene::loadspheres()
 
 	primitives_[indice]->brdf[0] = 0.640f/M_PI;
 	primitives_[indice]->brdf[1] = 0.640f/M_PI;
-	primitives_[indice]->brdf[2] = 0.0f/M_PI;
+	primitives_[indice]->brdf[2] = 0.0f/M_PI;*/
+	
+	
 	//==========================================
 
 	///************************ três bolas e um triângulo, imagens da primeira atividade

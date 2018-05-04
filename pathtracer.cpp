@@ -26,16 +26,23 @@ glm::vec3 PathTracer::L( Ray &ray,/*IntersectionRecord &intersection_record,*/ s
 	{
 		if(scene_.intersect(ray,intersection_record))
 		{
-			Ray refl_ray = intersection_record.get_reflected_ray();
+			Ray refl_ray = intersection_record.get_reflected_ray(ray.direction_);
 			curr_deph++;
 	
 			//float num_= glm::dot(intersection_record.normal_,refl_ray.direction_);
+			//intersection_record.brdf[0] = intersection_record.cor[0]/M_PI;
+			//intersection_record.brdf[1] = intersection_record.cor[1]/M_PI;
+			//intersection_record.brdf[2] = intersection_record.cor[2]/M_PI;
 
 			Li=L(refl_ray/*,intersection_record*/,curr_deph);
 
-			Lo[0] = intersection_record.emission[0] + intersection_record.brdf[0]*2*M_PI*dot(intersection_record.normal_,refl_ray.direction_)*Li[0];//(intersection_record.cor[0]/M_PI)*2.0*M_PI/*num_*/*Li[0];
-			Lo[1] = intersection_record.emission[1] + intersection_record.brdf[1]*2*M_PI*dot(intersection_record.normal_,refl_ray.direction_)*Li[1];//(intersection_record.cor[1]/M_PI)*2.0*M_PI/*num_*/*Li[1];
-			Lo[2] = intersection_record.emission[2] + intersection_record.brdf[2]*2*M_PI*dot(intersection_record.normal_,refl_ray.direction_)*Li[2];//(intersection_record.cor[2]/M_PI)*2.0*M_PI/*num_*/*Li[2];
+			if(intersection_record.material_type == 0){
+			Lo[0] = intersection_record.emission[0] + intersection_record.brdf[0]*2*M_PI*dot(intersection_record.normal_,refl_ray.direction_)*Li[0];
+			Lo[1] = intersection_record.emission[1] + intersection_record.brdf[1]*2*M_PI*dot(intersection_record.normal_,refl_ray.direction_)*Li[1];
+			Lo[2] = intersection_record.emission[2] + intersection_record.brdf[2]*2*M_PI*dot(intersection_record.normal_,refl_ray.direction_)*Li[2];
+			}
+			 if(intersection_record.material_type == 1) 
+				Lo = Li;
 		}
 	}
 	return Lo;
@@ -77,6 +84,7 @@ void PathTracer::integrate( void )
 
 	//glm::vec3* amostras = new glm::vec3[num_amostras];
 	glm::vec3 amostras;
+	glm::vec3 tmp;
 
     for ( std::size_t y = 0; y < buffer_.v_resolution_; y++ )
     {
@@ -113,15 +121,17 @@ void PathTracer::integrate( void )
 		
             			Ray ray{ camera_.getWorldSpaceRay( glm::vec2{ x + randfx , y + randfy } ) };
 				std::size_t curr_deph = 0;
-				amostras += L(ray,/*intersection_record,*/curr_deph); 
-				
+				tmp = L(ray,/*intersection_record,*/curr_deph); 
+				amostras[0]+=tmp[0]/num_amostras;
+				amostras[1]+=tmp[1]/num_amostras;
+				amostras[2]+=tmp[2]/num_amostras;
 	
 		}
 
 
-		buffer_.buffer_data_[x][y][0] = amostras[0]/num_amostras;//media aritmetica das amostras
-		buffer_.buffer_data_[x][y][1] = amostras[1]/num_amostras;
-		buffer_.buffer_data_[x][y][2] = amostras[2]/num_amostras;
+		buffer_.buffer_data_[x][y][0] = amostras[0];///num_amostras;//media aritmetica das amostras
+		buffer_.buffer_data_[x][y][1] = amostras[1];///num_amostras;
+		buffer_.buffer_data_[x][y][2] = amostras[2];///num_amostras;
         }
     }
 
