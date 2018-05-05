@@ -27,7 +27,7 @@ public:
 
 	glm::vec3 normal;//vetor normal
 
-	int material_type;//0 for difuse and 1 for metal
+	int material_type;//0 for difuse and 1 for mirror
 };
 
 #endif /* PRIMITIVE_H_ */
