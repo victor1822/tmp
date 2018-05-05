@@ -1,15 +1,5 @@
-# Blender MTL File: 'entire_scene1.obj'
-# Material Count: 7
-
-newmtl Material.002
-Ns 92.156863
-Ka 1.000000 1.000000 1.000000
-Kd 0.640000 0.582000 0.000000
-Ks 0.500000 0.500000 0.500000
-Ke 0.000000 0.000000 0.000000
-Ni 1.000000
-d 1.000000
-illum 2
+# Blender MTL File: 'None'
+# Material Count: 6
 
 newmtl back_wall.001
 Ns 92.156863
@@ -41,7 +31,7 @@ Ni 1.000000
 d 1.000000
 illum 2
 
-newmtl ligth.001
+newmtl ligth
 Ns 92.156863
 Ka 1.000000 1.000000 1.000000
 Kd 0.000001 0.000001 0.000001
@@ -54,7 +44,7 @@ illum 2
 newmtl right_wall.001
 Ns 92.156863
 Ka 1.000000 1.000000 1.000000
-Kd 0.020871 0.146000 0.646026
+Kd 0.020871 0.640000 0.146026
 Ks 0.500000 0.500000 0.500000
 Ke 0.000000 0.000000 0.000000
 Ni 1.000000
